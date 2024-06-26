@@ -1,0 +1,18 @@
+rman target /
+
+# Монтирование CDB
+STARTUP MOUNT;
+
+# Монтирование PDB (если не смонтирована)
+ALTER PLUGGABLE DATABASE xepdb1 MOUNT;
+
+# Восстановление файлов данных PDB
+RUN {
+  SET NEWNAME FOR DATABASE TO '/path/to/your/datafile';
+  RESTORE PLUGGABLE DATABASE xepdb1;
+  SWITCH DATAFILE ALL;
+  RECOVER PLUGGABLE DATABASE xepdb1;
+}
+
+# Открытие PDB
+ALTER PLUGGABLE DATABASE xepdb1 OPEN;
